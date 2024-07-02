@@ -98,18 +98,18 @@
                             <div class="row gx-5 row-cols-1 row-cols-md-2">
                                 <div class="col mb-5 h-100">
                                     <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-                                    <h2 class="h5">Acesse a Câmera:</h2>
-                                    <p class="mb-0">Clique no botão "Permitir" quando solicitado para acessar a câmera do seu dispositivo.</p>
+                                    <h2 class="h5">Clique em Upload de Fotos</h2>
+                                    <p class="mb-0">Quando clicar em Upload, você será direcionado para o drive.</p>
                                 </div>
                                 <div class="col mb-5 h-100">
                                     <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-building"></i></div>
-                                    <h2 class="h5">Tire uma Foto:</h2>
-                                    <p class="mb-0">Toque no botão "Tirar Foto" para capturar a imagem.</p>
+                                    <h2 class="h5">Clique no Mais:</h2>
+                                    <p class="mb-0">E faça o upload das fotos e videos para os noivos receberem depois.</p>
                                 </div>
                                 <div class="col mb-5 mb-md-0 h-100">
                                     <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
-                                    <h2 class="h5">Envie a Foto:</h2>
-                                    <p class="mb-0">Após tirar a foto, clique no botão "Enviar Foto" para nos enviar a imagem.</p>
+                                    <h2 class="h5">Tire a Foto:</h2>
+                                    <p class="mb-0">Se você quiser, pode a partir de lá mesmo, tirar fotos na hora e deixar salvo, só clicar no Tire Foto</p>
                                 </div>
                                 <div class="col h-100">
                                     <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
@@ -124,20 +124,13 @@
 			
 	   <!-- Fotos-->
 	   <div class="container px-5">
-			<video id="video" style=" border: 2px dotted black; border-radius: 10px;" width="350" height="350" autoplay></video>
-			<br>
-			<button id="snap" class="btn btn-dark" style= "margin-top: 20px; margin-bottom: 20px;width: 350px;">Tirar Foto</button>
-			<br>
-			<canvas id="canvas" style=" border: 2px dotted black; border-radius: 10px;"width="350" height="350"></canvas>
-			<br>
-			<button id="upload" class="btn btn-dark" style= "margin-top: 20px; margin-bottom: 20px;width: 350px;">Enviar Foto</button>
 			<button id="upload" class="btn btn-dark" style= "margin-top: 20px; margin-bottom: 20px;width: 350px;"><a href="https://drive.google.com/drive/folders/184Jc3et_MvtC9nsgXHWERLzpTORwwq6U?usp=sharing" style="text-decoration: none">Upload de Fotos</button></a>
 			<div id="spinner-overlay" class="spinner-overlay">
 			  <div class="spinner"></div>
 			</div>
 			<div id="popup" class="popup">
 				<h3 id="popup-message"></h3>
-				<button onclick="closePopup()" class="btn btn-dark">OK</button>
+				<button class="btn btn-dark">OK</button>
 			</div>
 		</div>
 	<!-- Testimonial section-->
@@ -169,84 +162,6 @@
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
 		
-		 <!-- Adicionando Firebase -->
-		 <script type="module">
-		 // Importando as funções necessárias do SDK
-			import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-			import { getStorage, ref, uploadString } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-			// Configurações do Firebase
-			const firebaseConfig = {
-				apiKey: "AIzaSyAEhpm9z9y9QkruHhNzJpxA7wtgHu2CXD4",
-				authDomain: "casamento-426723.firebaseapp.com",
-				projectId: "casamento-426723",
-				storageBucket: "casamento-426723.appspot.com",
-				messagingSenderId: "612417204558",
-				appId: "1:612417204558:web:421ea76e5a898afd26ae1f"
-			};
-
-			// Inicializando o Firebase
-			const app = initializeApp(firebaseConfig);
-			const storage = getStorage(app);
-
-			// Acessar a câmera
-			navigator.mediaDevices.getUserMedia({ video: true })
-				.then(function(stream) {
-					var video = document.getElementById('video');
-					video.srcObject = stream;
-					video.play();
-				})
-				.catch(function(err) {
-					console.log("Ocorreu um erro: " + err);
-					alert("Erro ao acessar a câmera: " + err.message);
-				});
-
-			// Tirar a foto
-			var canvas = document.getElementById('canvas');
-			var context = canvas.getContext('2d');
-			document.getElementById('snap').addEventListener('click', function() {
-				context.drawImage(video, 0, 0, canvas.width, canvas.height);
-			});
-
-			// Enviar a foto para o Firebase Storage
-			document.getElementById('upload').addEventListener('click', function() {
-				var dataURL = canvas.toDataURL('image/png');
-				var storageRef = ref(storage, 'fotos_casamento/' + Date.now() + '.png');
-				var spinnerOverlay = document.getElementById('spinner-overlay');
-				var popup = document.getElementById('popup');
-				var popupMessage = document.getElementById('popup-message');
-
-				spinnerOverlay.style.display = 'flex';
-				uploadString(storageRef, dataURL, 'data_url').then(function(snapshot) {
-					spinnerOverlay.style.display = 'none';
-					popupMessage.textContent = 'Foto enviada com sucesso!';
-					popup.style.display = 'block';
-				}).catch(function(error) {
-					spinnerOverlay.style.display = 'none';
-					popupMessage.textContent = 'Erro ao enviar a foto: ' + error.message;
-					popup.style.display = 'block';
-				});
-			});
-
-			// Fechar o pop-up
-			function closePopup() {
-				document.getElementById('popup').style.display = 'none';
-			}
-		</script>
-		<script>
 		
-			// Fechar o pop-up
-			function closePopup() {
-				document.getElementById('popup').style.display = 'none';
-			   clearCanvas(); // Chamando a função para limpar o canvas
-			}
-			
-			// Função para limpar o canvas
-			function clearCanvas() {
-				var canvas = document.getElementById('canvas');
-				var context = canvas.getContext('2d');
-				context.clearRect(0, 0, canvas.width, canvas.height);
-			}
-		</script>
     </body>
 </html>
